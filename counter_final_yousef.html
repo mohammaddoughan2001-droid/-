@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>عداد استغفار عن روح يوسف الدرة</title>
+  <style>
+    body { font-family: "Segoe UI", Tahoma, Arial, sans-serif; direction: rtl; text-align: center; padding: 2rem; background: #f3f4f6; color: #0f172a; }
+    .card { max-width: 720px; margin: 2rem auto; background: white; padding: 1.6rem; border-radius: 10px; box-shadow: 0 6px 18px rgba(15,23,42,0.06); }
+    h1 { margin-bottom: 0.2rem; }
+    p.lead { color:#374151; }
+    .counter { font-size: 3rem; margin: 1rem 0; font-weight: 700; }
+    button { padding: 0.8rem 1.2rem; border-radius: 8px; border: none; cursor: pointer; background: #065f46; color: white; font-size: 1rem; }
+    .note { font-size: 0.9rem; color:#475569; margin-top: 1rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>عداد استغفار عن روح يوسف الدرة</h1>
+    <p class="lead">كل من يضغط زر "أستغفر الله" يزيد العداد بنية أن تكون عن روح <strong>يوسف الدرة</strong> رحمه الله.</p>
+    <div class="counter" id="counter">—</div>
+    <button id="prayBtn">أستغفر الله</button>
+    <div class="note">بعد الضغط، سيُحفظ العداد في قاعدة البيانات لتظهر الزيادة لجميع الزوار.</div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.15.0/firebase-app.js";
+    import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/10.15.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNuBwRmSnOwcQXDe-Yq2jnVpuK462a8tw",
+      authDomain: "yousif-aldorra.firebaseapp.com",
+      databaseURL: "https://yousif-aldorra-default-rtdb.firebaseio.com",
+      projectId: "yousif-aldorra",
+      storageBucket: "yousif-aldorra.firebasestorage.app",
+      messagingSenderId: "80285490805",
+      appId: "1:80285490805:web:b487f953c94e9e0cc8a23c",
+      measurementId: "G-VJVPQ9QX79"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const counterRef = ref(db, 'estighfar_counter/yousef_al_durra');
+
+    const counterEl = document.getElementById('counter');
+    const btn = document.getElementById('prayBtn');
+
+    // Real-time update
+    onValue(counterRef, (snapshot) => {
+      const data = snapshot.val();
+      counterEl.textContent = (data && data.count) ? data.count : 0;
+    }, (error) => {
+      console.error(error);
+      counterEl.textContent = "خطأ في الاتصال";
+    });
+
+    btn.addEventListener('click', () => {
+      runTransaction(counterRef, (currentData) => {
+        if (currentData === null) return { count: 1 };
+        return { count: (currentData.count||0) + 1 };
+      }).then(() => {
+        btn.textContent = "جزاك الله خير — تم";
+        setTimeout(()=> btn.textContent = "أستغفر الله", 900);
+      }).catch(err => console.error(err));
+    });
+  </script>
+</body>
+</html>
