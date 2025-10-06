@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عداد الاستغفار عن روح يوسف الدرة</title>
+  <script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, get, set, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNuBwRmSnOwcQXDe-Yq2jnVpuK462a8tw",
+      authDomain: "yousif-aldorra.firebaseapp.com",
+      databaseURL: "https://yousif-aldorra-default-rtdb.firebaseio.com",
+      projectId: "yousif-aldorra",
+      storageBucket: "yousif-aldorra.firebasestorage.app",
+      messagingSenderId: "80285490805",
+      appId: "1:80285490805:web:b487f953c94e9e0cc8a23c",
+      measurementId: "G-VJVPQ9QX79"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const counterRef = ref(db, "estighfar/count");
+
+    // Function to load counter
+    async function loadCount() {
+      const snapshot = await get(counterRef);
+      if (snapshot.exists()) {
+        document.getElementById("count").innerText = snapshot.val();
+      } else {
+        set(counterRef, 0);
+      }
+    }
+
+    // Function to increase counter
+    async function increaseCount() {
+      const snapshot = await get(counterRef);
+      let current = snapshot.exists() ? snapshot.val() : 0;
+      const newCount = current + 1;
+      await update(ref(db), { "estighfar/count": newCount });
+      document.getElementById("count").innerText = newCount;
+    }
+
+    // Load when ready
+    window.onload = loadCount;
+  </script>
+
+  <style>
+    body {
+      background-color: #f2f8f2;
+      color: #333;
+      font-family: "Cairo", sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-size: 22px;
+      padding: 15px 40px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #count {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 20px;
+      color: #006400;
+    }
+    h1 {
+      color: #2f6627;
+    }
+  </style>
+</head>
+<body>
+  <h1>عداد الاستغفار عن روح يوسف الدرة 🤍</h1>
+  <div id="count">0</div>
+  <button onclick="increaseCount()">أستغفر الله</button>
+  <p>كل من يضغط يضيف استغفارًا عن روح الشهيد يوسف الدرة 🌿</p>
+</body>
+</html>
